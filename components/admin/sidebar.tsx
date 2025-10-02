@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { ThemeSwitch } from "../theme-switch";
 import { FiLayout, FiUsers, FiCheckSquare, FiZap, FiChevronLeft, FiChevronRight, FiPlus, FiSettings, FiShield, FiUserCheck, FiSmartphone, FiShoppingCart, FiTrendingUp, FiActivity, FiAirplay, FiAperture, FiArchive, FiBarChart2, FiBook, FiBriefcase, FiCalendar, FiCamera, FiCode, FiDatabase, FiFeather, FiFileText, FiFolder, FiGlobe, FiGrid, FiHeart, FiHome, FiInbox, FiLayers, FiMail, FiMap, FiMonitor, FiPackage, FiPaperclip, FiPieChart, FiServer, FiTarget, FiTool, FiLogOut } from "react-icons/fi";
 import { Logo } from "../icons";
+import Image from "next/image";
 import { Modal, ModalContent, ModalHeader } from "@heroui/modal";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
@@ -211,26 +212,42 @@ export default function AdminSidebar({ variant = "default" }: { variant?: "defau
     >
       <div className="flex items-center gap-3 px-1 py-1">
         {collapsed ? (
-          <></>
-        ) : (
           <>
-            <Avatar
-              name={me?.username || "U"}
-              className="bg-gradient-to-tr from-primary to-secondary text-white"
-              size="sm"
-            />
-            <div className="leading-tight">
-              <p className="text-small font-semibold">{me?.username || "Pengguna"}</p>
-              <p className="text-tiny text-default-500">{roleBadge}</p>
-            </div>
           </>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <div>
+              {/* Logo ada besar ada di sini */}
+              <Image
+                src="/logo.svg"
+                alt="Koala Task"
+                width={140}
+                height={32}
+                priority
+                className="h-8 w-auto object-contain dark:invert"
+              />
+            </div>
+            
+          </div>
         )}
         {variant !== "mobile" && (
-          <div className="ml-auto flex gap-2 items-center">
+          <div className={`ml-auto flex gap-2 items-center ${collapsed ? 'flex-col' : ''}`}>
+            {
+              collapsed && (
+                <Image
+                  src="/logo-mini.svg"
+                  alt="Logo mini"
+                  width={32}
+                  height={32}
+                  priority
+                  className="h-8 w-8 object-contain dark:invert"
+                />
+              )
+            }
             <Button
               isIconOnly
               size="sm"
-              variant="light"
+              variant="ghost"
               aria-label="menu"
               onPress={() => setCollapsed((v) => !v)}
               endContent={collapsed ? <FiChevronRight /> : <FiChevronLeft />}
@@ -252,6 +269,19 @@ export default function AdminSidebar({ variant = "default" }: { variant?: "defau
 
       {/* Bottom settings */}
       <div className="mt-auto pt-3">
+        { variant !== 'mobile' && !collapsed && (
+          <div className="flex items-center gap-2">
+            <Avatar
+              name={me?.username || "U"}
+              className="bg-gradient-to-tr from-primary to-secondary text-white"
+              size="sm"
+            />
+            <div className="leading-tight">
+              <p className="text-small font-semibold">{me?.username || "Pengguna"}</p>
+              <p className="text-tiny text-default-500">{roleBadge}</p>
+            </div>
+          </div>
+        )}
         <Divider className="my-3" />
         <Popover placement="top-start">
           <PopoverTrigger>
